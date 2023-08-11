@@ -19,7 +19,7 @@ public class InitiazeApp {
 
 
     public void runApp() throws ExecutionException, InterruptedException {
-        getAndMergeThreeApi();
+        getAndMergeTwoApiWithException();
     }
 
 
@@ -45,8 +45,10 @@ public class InitiazeApp {
         String api2Result = api2ResponseCompletable.get();
         long endTime = System.currentTimeMillis();
         log.info("Execution Complete for API 1 API 2 API 3 Time -{}",endTime-startTime);
-    }
 
+
+
+    }
     private void getAndMergeTwoApi() throws ExecutionException, InterruptedException {
         log.info("Execution started calling two api API 1 and API 2");
         long startTime = System.currentTimeMillis();
@@ -63,6 +65,30 @@ public class InitiazeApp {
         String api2Result = api2ResponseCompletable.get();
         long endTime = System.currentTimeMillis();
         log.info("Execution Complete for two api API 1 and API 2 Time -{}",endTime-startTime);
+
+    }
+
+    private void getAndMergeTwoApiWithException() throws ExecutionException, InterruptedException {
+        log.info("Execution started calling two api API 1 and API 4");
+        long startTime = System.currentTimeMillis();
+        CompletableFuture<String> api1ResponseCompletable  = CompletableFuture.supplyAsync(() ->apiProxy.api1("api1"));
+        CompletableFuture<String> api4ResponseCompletable  = CompletableFuture.supplyAsync(() ->apiProxy.api4("api4")).exceptionally(ex ->{
+            log.error("Api 4 threw  exception msg-{} ",ex.getMessage());
+            return "Fallback Response";
+        });
+
+        CompletableFuture<Void> combinedFuture = CompletableFuture.allOf(api1ResponseCompletable, api4ResponseCompletable);
+
+        // Wait for both API calls to complete
+        combinedFuture.join();
+
+        // Get the results from the CompletableFutures
+        String api1Result = api1ResponseCompletable.get();
+        String api4Result = api4ResponseCompletable.get();
+        long endTime = System.currentTimeMillis();
+        log.info("Execution Complete for two api API 1 and API 4 Time -{}",endTime-startTime);
+        log.info("api1Result -{} api4Result-{} ",api1Result,api4Result);
+
     }
 
     private String handleException(Exception e){
