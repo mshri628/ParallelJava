@@ -19,9 +19,6 @@ public class InitiazeApp {
 
 
     public void runApp() throws ExecutionException, InterruptedException {
-        Scanner scanner = new Scanner(System.in);
-        String g=scanner.next();
-        System.out.println(g);
         getAndMergeThreeApi();
     }
 
@@ -48,10 +45,8 @@ public class InitiazeApp {
         String api2Result = api2ResponseCompletable.get();
         long endTime = System.currentTimeMillis();
         log.info("Execution Complete for API 1 API 2 API 3 Time -{}",endTime-startTime);
-
-
-
     }
+
     private void getAndMergeTwoApi() throws ExecutionException, InterruptedException {
         log.info("Execution started calling two api API 1 and API 2");
         long startTime = System.currentTimeMillis();
@@ -68,8 +63,6 @@ public class InitiazeApp {
         String api2Result = api2ResponseCompletable.get();
         long endTime = System.currentTimeMillis();
         log.info("Execution Complete for two api API 1 and API 2 Time -{}",endTime-startTime);
-
-
     }
 
     private String handleException(Exception e){
