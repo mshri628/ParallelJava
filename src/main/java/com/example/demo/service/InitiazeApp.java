@@ -49,6 +49,7 @@ public class InitiazeApp {
 
 
     }
+    // Example 1
     private void getAndMergeTwoApi() throws ExecutionException, InterruptedException {
         log.info("Execution started calling two api API 1 and API 2");
         long startTime = System.currentTimeMillis();
