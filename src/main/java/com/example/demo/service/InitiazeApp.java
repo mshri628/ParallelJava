@@ -19,7 +19,7 @@ public class InitiazeApp {
 
 
     public void runApp() throws ExecutionException, InterruptedException {
-        getAndMergeTwoApiWithException();
+        getAndMergeApi(5);
     }
 
 
@@ -91,6 +91,29 @@ public class InitiazeApp {
         log.info("api1Result -{} api4Result-{} ",api1Result,api4Result);
 
     }
+
+    private void getAndMergeApi(Integer n) throws ExecutionException, InterruptedException {
+        log.info("Execution started calling {} api API",n);
+        long startTime = System.currentTimeMillis();
+
+        List<CompletableFuture<String>> futureList = new ArrayList<>();
+        for (Integer i = 1; i <= n; i++) {
+            String  param = i.toString();
+            CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> apiProxy.api(param));
+            futureList.add(future);
+        }
+
+        // Wait for all CompletableFuture to complete and collect the results
+        List<Integer> resultList = new ArrayList<>();
+        for (Integer i = 1; i <= n; i++) {
+            String result = futureList.get(i-1).get();
+            log.info("API RESPONSE FOR PARAM {} is {}",i,result);
+        }
+        long endTime = System.currentTimeMillis();
+        log.info("Execution Complete for {} api  Time -{}",n,endTime-startTime);
+
+    }
+
 
     private String handleException(Exception e){
         log.error("Exception msg-{}",e.getMessage());

@@ -7,6 +7,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class ApiProxy {
 
+
+    public String api(String arg)  {
+        log.info("API  Execution started for param-{} ThreadName-{}",arg,Thread.currentThread().getName());
+        sleep(3000);
+        log.info("API  Execution complete for param-{}",arg);
+        return "RESPONSE-API"+arg;
+    }
+
     public String api1(String arg)  {
         log.info("API 1 Execution started ThreadName-{}",Thread.currentThread().getName());
         sleep(3000);
@@ -34,6 +42,7 @@ public class ApiProxy {
         log.info("API 4 Execution complete");
         throw new NullPointerException("Null String ");
     }
+
 
     public void sleep(long timeInMilli)
     {
